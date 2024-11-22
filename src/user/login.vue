@@ -100,53 +100,40 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-          this.loading = true
-        //-www-form-urlencoded的格式可以有多种方式，详见axios文档
-        const params = new URLSearchParams();
-        params.append('username', this.loginForm.userName);
-        params.append('password', this.loginForm.password);
-        http.post('/users/login/', params)
-        // axios({
-        //   method: 'post',
-        //   url: 'http://61.240.140.173:8000/users/login/',
-        //   // url:'/api/users/login/',
-        //   headers: {
-        //         'Content-Type': 'application/x-www-form-urlencoded'
-        //       },
-        //   data: {
-        //     username:this.loginForm.userName,
-        //     password:this.loginForm.password
-        //   }
-        .then((res)=>{
-          if (res.data.message===1){
-            this.loading = false
-            // if (res.data.data)
-            let user={token:res.data.data,name:this.loginForm.userName,stats:res.data.stats}
-            this.$store.commit('login',user)
-            this.$router.push('/systematic_risk')
+        this.loading = true;
+        // 使用 axios 发送 POST 请求
+        axios({
+          method: 'post',
+          url: 'http://61.240.140.173:8000/users/login/',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: {
+            username: this.loginForm.userName,
+            password: this.loginForm.password
           }
-          else {
+        })
+        .then((res) => {
+          if (res.data.message === 1) {
+            this.loading = false;
+            let user = { token: res.data.data, name: this.loginForm.userName, stats: res.data.stats };
+            this.$store.commit('login', user);
+            this.$router.push('/systematic_risk');
+          } else {
             this.$message({
               showClose: true,
               message: res.data.data,
               type: 'warning'
             });
-            this.loading = false
+            this.loading = false;
           }
-
-          }).catch((error)=>{
-            console.log(error)
-            this.loading = false
-          alert('登陆失败')
-          })
-          // this.$store.dispatch('login', this.loginForm).then(() => {
-          //   this.$router.push({ path: this.redirect || '/' })
-          //   this.loading = false
-          // }).catch(() => {
-          //   this.loading = false
-          // }
-
-      })
+        })
+        .catch((error) => {
+          console.log(error);
+          this.loading = false;
+          alert('登陆失败');
+        });
+      });
     }
   },
   computed:{
