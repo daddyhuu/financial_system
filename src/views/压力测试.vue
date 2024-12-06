@@ -223,7 +223,7 @@ export default {
   },
   methods: {
     querySearch1(queryString, cb) {
-      http.get('/interest_rate_risk/search', { params: { company: queryString } })
+      http.get('/stress/interest_rate_risk_search/', { params: { company: queryString } })
         .then(response => {
           const re = response.data.map(item => ({ value: item }));
           cb(re);
@@ -238,7 +238,8 @@ export default {
         });
     },
     querySearch2(queryString, cb) {
-      http.get('/currency_risk/search', { params: { company: queryString } })
+
+      http.get('/stress/currency_risk_search/', { params: { company: queryString } })
         .then(response => {
           const re = response.data.map(item => ({ value: item }));
           cb(re);
@@ -253,7 +254,7 @@ export default {
         });
     },
     querySearch3(queryString, cb) {
-      http.get('/stock_price_risk/search', { params: { company: queryString } })
+      http.get('/stress/stock_price_risk_search/', { params: { company: queryString } })
         .then(response => {
           const re = response.data.map(item => ({ value: item }));
           cb(re);
@@ -276,7 +277,7 @@ export default {
         this.$message.error('请选择压力情景');
         return;
       }
-      http.post('/interest_rate_risk/test', this.formInline)
+      http.post('/stress/interest_rate_risk_test/', this.formInline)
         .then(response => {
           this.weightedResults = response.data;
           this.renderChart1();
@@ -293,7 +294,7 @@ export default {
         this.$message.error('请选择压力情景');
         return;
       }
-      http.post('/currency_risk/test', this.formInline)
+      http.post('/stress/currency_risk_test/', this.formInline)
         .then(response => {
           this.weightedResults = response.data;
           this.renderChart2();
@@ -310,7 +311,7 @@ export default {
         this.$message.error('请选择压力情景');
         return;
       }
-      http.post('/stock_price_risk/test', this.formInline)
+      http.post('/stress/stock_price_risk_test/', this.formInline)
         .then(response => {
           this.weightedResults = response.data;
           this.renderChart3();
@@ -428,7 +429,7 @@ export default {
       }
     },
     calculateScenario1() {
-      http.post('/smart_interest_rate_risk', {scenarios: this.options_scenario1})
+      http.post('/stress/smart_interest_rate_risk/', {scenarios: this.options_scenario1})
         .then(response => {
           this.options_scenario4 = response.data.scenarios;
         })
@@ -437,7 +438,7 @@ export default {
         });
     },
     calculateScenario2() {
-      http.post('/smart_currency_risk', {scenarios: this.options_scenario2})
+      http.post('/stress/smart_currency_risk/', {scenarios: this.options_scenario2})
         .then(response => {
           this.options_scenario4 = response.data.scenarios;
         })
@@ -446,7 +447,7 @@ export default {
         });
     },
     calculateScenario3() {
-      http.get('/smart_stock_price_risk')
+      http.get('/stress/smart_stock_price_risk/')
         .then(response => {
           this.options_scenario4 = response.data.scenarios;
         })

@@ -578,31 +578,44 @@ tableLabel_long: {
     // 健康指数
     onSubmit1(){
       console.log("健康指数查询")
+
         http.get(
                 "/health/health_search/",
                 {params:{
                     name: this.formInline1.company,//公司名
                     date: this.formInline1.quarter_year,//时间（年份+季度）
         }}).then(response => {
-            this.tableData_1= Array(response.data.data)
-          if (this.tableData_1['等级']===1)
-            this.tableData_1[0].level='严重'
-          else if (this.tableData_1['等级']===2)
-            this.tableData_1[0].level='中等'
-          else
-            this.tableData_1[0].level='良好'
+          if (response.data.data) {
+
+
+            this.tableData_1 = Array(response.data.data)
+            if (this.tableData_1['等级'] === 1)
+              this.tableData_1[0].level = '严重'
+            else if (this.tableData_1['等级'] === 2)
+              this.tableData_1[0].level = '中等'
+            else
+              this.tableData_1[0].level = '良好'
             // console.log(response)
-          this.tableData_1[0].name=this.formInline1.company
-          console.log(this.tableData_1)
-          if (this.radarData){
-            this.radarData.length=0
+            this.tableData_1[0].name = this.formInline1.company
+            // console.log(this.tableData_1)
+            if (this.radarData) {
+              this.radarData.length = 0
+            }
+            for (let i in response.data.data) {
+              // console.log(i)
+              if (i !== '健康指数' && i !== '等级' && typeof response.data.data[i] === 'number') this.radarData.push(response.data.data[i])
+            }
+            // console.log(this.radarData)
           }
-          for (let i in response.data.data) {
-            // console.log(i)
-            if (i !== '健康指数' && i !== '等级' && typeof response.data.data[i] === 'number') this.radarData.push(response.data.data[i])
+          else {
+            this.$notify.info({
+              title: '提示',
+              message: '暂无数据'
+            });
           }
-          // console.log(this.radarData)
-          })
+        }
+        )
+
     },
     // 
 
